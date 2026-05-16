@@ -2,20 +2,20 @@
 
 ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?logo=cloudflare&logoColor=white) ![Gemini API](https://img.shields.io/badge/Google-Gemini_API-4285F4?logo=google&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black)
 
-一个基于 Cloudflare Pages 部署的复古风格 AI 聊天界面，集成了 Google Gemini 模型，实时工具与后台管控。
+一个基于 Cloudflare Pages 部署的复古风格 AI 聊天界面。
 
 ## ✨ 项目特性
 
-- **拟物设计**：采用 Lucida Grande 字体与经典的 UI 元素，重现早期操作系统的视觉体验（提供默认界面及诺基亚风格备用界面）。
-- ** AI 驱动**：集成 Google Gemini API，支持自定义模型（`GEMINI_MODEL`）与系统提示词（`SYSTEM_PROMPT`），提供个性化的对话体验。
-- **实时工具**：支持基于地理位置的实时天气（Open-Meteo）与空气质量（WAQI）查询。
-- **内容合规**：内置离线敏感词过滤系统，并在部署时自动构建词典。
+- **拟物设计**：采用拟物风格 UI，重现早期Mac OS X的感觉。
+- **AI 驱动**：使用 Google Gemini API，支持模型选择（`GEMINI_MODEL`）与系统提示词（`SYSTEM_PROMPT`）
+- **实时工具**：实时天气（Open-Meteo）与空气质量（WAQI）查询。
+- **内容合规**：离线敏感词过滤系统。
 - **安全加固**：
   - 严格的 Content Security Policy (CSP)，仅允许白名单域名资源加载，禁用 `eval`。
   - 所有请求强制通过后端统一入口，前端不可绕过安全检查。
 - **后台管控**：
   - **访问控制**：支持 `BLOCKED_IPS` 封禁特定恶意 IP，并可一键开启 `MAINTENANCE_MODE` 维护模式。
-  - **日志与管理**：结合 Cloudflare KV (`CHAT_LOGS`)，实现对话日志记录、滥用自动封禁机制，并支持在对话框中通过 `ADMIN_PASSWORD` 执行后台清理与解封等特殊指令。
+  - **日志与管理**：结合 Cloudflare KV (`CHAT_LOGS`)，实现对话日志记录、滥用自动封禁机制，并支持在对话框中通过 `ADMIN_PASSWORD` 执行后台清理与解封等指令。
 
 ## 📂 项目结构
 
@@ -115,8 +115,6 @@
 如果在代码中启用了日志记录或封禁功能，需要在 Cloudflare 中创建一个 KV 命名空间并绑定：
 - 变量名称 (Variable name): `CHAT_LOGS`
 - KV 命名空间 (KV namespace): 选择你创建的日志记录空间。
-
-*(建议在生产和预览环境中都配置上述环境变量和绑定)*
 
 ### 6. 保存并部署
 1. 点击 **"保存并部署"** (Save and Deploy)。
