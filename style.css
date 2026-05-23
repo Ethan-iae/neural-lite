@@ -669,7 +669,7 @@
                 max-width: none;
                 border-radius: 0;
                 box-shadow: none;
-                animation-name: macBootFadeMobile;
+                animation: none;
             }
 
             .bubble {
@@ -910,7 +910,7 @@
 
         @media screen and (max-width: 768px) {
             .window-frame {
-                animation-name: macBootFadeMobile;
+                animation: none;
             }
         }
 
