@@ -407,24 +407,65 @@ let lastMessageTime = 0;
         }, 100);
         function resetSystem() {
             const modal = document.getElementById('custom-modal');
+            modal.classList.remove('modal-closing');
             modal.style.display = 'flex';
             if (typeof playSound === 'function') playSound('recv');
         }
         function closeModal() {
-            document.getElementById('custom-modal').style.display = 'none';
+            const modal = document.getElementById('custom-modal');
+            modal.classList.add('modal-closing');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.classList.remove('modal-closing');
+            }, 250);
         }
         function confirmResetAction() {
             closeModal();
             if (typeof playSound === 'function') playSound('sent');
             localStorage.removeItem('chat_logs');
             localStorage.removeItem('neural_lite_memory');
+            
             setTimeout(() => {
-                location.reload();
-            }, 300);
+                const chatBox = document.getElementById('chat-container');
+                if (chatBox) {
+                    chatBox.innerHTML = `
+            <div class="message-row">
+                <div class="avatar ai-avatar">AI</div>
+                <div class="bubble ai-bubble">
+                    你好！ 我是连接云端大模型的 AI ，很高兴协助你。 <br>
+                    <br>
+                    试试问我：
+                    <ul>
+                        <li>“人类存在的意义是什么?”</li>
+                        <li>“北京今天的天气怎么样?”</li>
+                    </ul>
+                    <div class="similarity-score">系统消息</div>
+                </div>
+            </div>`;
+                }
+                if (window.brain) {
+                    window.brain.memory = { name: "朋友", topic: null, mood: 0 };
+                    window.brain.history = [];
+                }
+                window.isFirstSessionMessage = true;
+                lastMessageTime = 0;
+            }, 250);
+
             localStorage.removeItem('neural_lite_width');
             localStorage.removeItem('neural_lite_height');
             localStorage.removeItem('neural_lite_left');
             localStorage.removeItem('neural_lite_top');
+            
+            // Revert window to original state
+            const frame = document.querySelector('.window-frame');
+            if (frame && window.innerWidth > 768) {
+                frame.style.width = '';
+                frame.style.height = '';
+                frame.style.margin = '';
+                frame.style.position = '';
+                frame.style.left = '';
+                frame.style.top = '';
+            }
         }
         (function makeDraggable() {
             const frame = document.querySelector('.window-frame');

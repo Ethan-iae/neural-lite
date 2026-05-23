@@ -535,6 +535,46 @@
             }
         }
 
+        @keyframes macSheetUp {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+
+        @keyframes macOverlayFadeIn {
+            0% {
+                background-color: rgba(0, 0, 0, 0);
+                backdrop-filter: blur(0px);
+            }
+            100% {
+                background-color: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(2px);
+            }
+        }
+
+        @keyframes macOverlayFadeOut {
+            0% {
+                background-color: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(2px);
+            }
+            100% {
+                background-color: rgba(0, 0, 0, 0);
+                backdrop-filter: blur(0px);
+            }
+        }
+
+        .modal-closing .modal-window {
+            animation: macSheetUp 0.25s linear forwards;
+        }
+
+        .modal-overlay.modal-closing {
+            animation: macOverlayFadeOut 0.25s linear forwards;
+        }
+
         .message-row {
             animation: macMessagePop 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
             opacity: 0;
@@ -724,6 +764,7 @@
             justify-content: center;
             overflow: hidden;
             border-radius: 0 0 3px 3px;
+            animation: macOverlayFadeIn 0.25s linear forwards;
         }
 
         .modal-window {
