@@ -79,70 +79,11 @@
             vertical-align: middle;
         }
 
-        body.dark-mode {
-            background-color: #000;
-            color: #aaa;
-        }
-
-        body.dark-mode h2 {
-            background-color: #111;
-            border-bottom: 2px solid #555;
-            color: #ddd;
-        }
-
-        body.dark-mode .input-area {
-            background-color: #111;
-            border-bottom: 2px solid #555;
-        }
-
-        body.dark-mode .msg {
-            border-bottom: 1px dashed #333;
-        }
-
-        body.dark-mode .user-msg {
-            color: #ddd;
-        }
-
-        body.dark-mode .ai-msg {
-            color: #888;
-        }
-
-        body.dark-mode #userInput {
-            background-color: #222;
-            color: #fff;
-            border: 1px solid #555;
-        }
-
-        body.dark-mode #sendBtn {
-            background-color: #333;
-            color: #ddd;
-            border: 1px solid #555;
-        }
-
-        .nav-links {
-            float: right;
-            font-size: 12px;
-            font-weight: normal;
-        }
-
-        .nav-links a {
-            color: blue;
-            text-decoration: none;
-            margin-left: 8px;
-        }
-
-        body.dark-mode .nav-links a {
-            color: #55aaff;
-        }
     </style>
 </head>
 
 <body>
     <h2>
-        <span class="nav-links">
-
-            <a href="javascript:toggleTheme();" id="themeBtn">[夜间]</a>
-        </span>
         Neural-Lite 终端
     </h2>
 
@@ -168,35 +109,6 @@
     <a name="bottom" id="bottom"></a>
 
     <script type="text/javascript">
-        function getCookie(name) {
-            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg)) return decodeURIComponent(arr[2]);
-            else return "";
-        }
-        function toggleTheme() {
-            var bodyObj = document.body;
-            var btn = document.getElementById('themeBtn');
-            var isDark = bodyObj.className.indexOf('dark-mode') !== -1;
-
-            var d = new Date();
-            d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
-            var expires = "expires=" + d.toUTCString();
-
-            if (isDark) {
-                bodyObj.className = bodyObj.className.replace('dark-mode', '').replace(/^\s+|\s+$/g, '');
-                document.cookie = "neural_theme=light; path=/; " + expires;
-                btn.innerHTML = '[夜间]';
-            } else {
-                bodyObj.className += (bodyObj.className ? ' ' : '') + 'dark-mode';
-                document.cookie = "neural_theme=dark; path=/; " + expires;
-                btn.innerHTML = '[日间]';
-            }
-        }
-        var savedTheme = getCookie('neural_theme');
-        if (savedTheme === 'dark') {
-            document.body.className += ' dark-mode';
-            document.getElementById('themeBtn').innerHTML = '[日间]';
-        }
 
         /* Polyfills */
         if (typeof XMLHttpRequest === "undefined") {

@@ -379,25 +379,7 @@ let lastMessageTime = 0;
             }
         }
         loadChatHistory();
-        function toggleDarkMode() {
-            const body = document.body;
-            body.classList.toggle('dark-mode');
-            if (typeof playSound === 'function') playSound('switch');
-            if (body.classList.contains('dark-mode')) {
-                localStorage.setItem('neural_lite_theme', 'dark');
-                if (document.activeElement === userInput) userInput.blur();
-            } else {
-                localStorage.setItem('neural_lite_theme', 'light');
-            }
-        }
-        setTimeout(() => {
-            const minBtn = document.querySelector('.win-btn.min');
-            if (minBtn) {
-                minBtn.style.cursor = 'pointer';
-                minBtn.title = "切换日/夜模式";
-                minBtn.onclick = toggleDarkMode;
-            }
-        }, 100);
+
         setTimeout(() => {
             document.body.classList.remove('preload');
             var antiFlashStyle = document.getElementById('anti-flash');
