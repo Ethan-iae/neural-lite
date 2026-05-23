@@ -1,4 +1,4 @@
-import { processGeminiRequest, handleOptions } from "../lib/gemini-core.js";
+import { processGeminiRequest, handleOptions, formatAiResponse } from "../lib/gemini-core.js";
 
 export async function onRequestPost(context) {
     const { request, env } = context;
@@ -117,7 +117,8 @@ export async function onRequestPost(context) {
 
                 if (!aqiSuccess) report += `🌫️ 空气(AQI)：暂无数据`;
 
-                return new Response(JSON.stringify({ reply: report.trim(), memory: memory }), { 
+                const replyText = report.trim();
+                return new Response(JSON.stringify({ reply: replyText, html: formatAiResponse(replyText), memory: memory }), { 
                     headers: { 'Content-Type': 'application/json' } 
                 });
             }

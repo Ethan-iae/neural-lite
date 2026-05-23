@@ -7,6 +7,100 @@
 
 import { sensitiveWords } from "../api/vocabulary.js";
 
+export const retroEmojiMap = {
+    "🤣": "assets/emojis/1f601.png",
+    "🥺": "assets/emojis/1f625.png",
+    "😀": "assets/emojis/1f600.png",
+    "😁": "assets/emojis/1f601.png",
+    "😂": "assets/emojis/1f602.png",
+    "😃": "assets/emojis/1f603.png",
+    "😄": "assets/emojis/1f604.png",
+    "😅": "assets/emojis/1f605.png",
+    "😆": "assets/emojis/1f606.png",
+    "😇": "assets/emojis/1f607.png",
+    "😉": "assets/emojis/1f609.png",
+    "😊": "assets/emojis/1f60a.png",
+    "😋": "assets/emojis/1f60b.png",
+    "😌": "assets/emojis/1f60c.png",
+    "😍": "assets/emojis/1f60d.png",
+    "😎": "assets/emojis/1f60e.png",
+    "😏": "assets/emojis/1f60f.png",
+    "😐": "assets/emojis/1f610.png",
+    "😒": "assets/emojis/1f612.png",
+    "😓": "assets/emojis/1f613.png",
+    "😔": "assets/emojis/1f614.png",
+    "😖": "assets/emojis/1f616.png",
+    "😘": "assets/emojis/1f618.png",
+    "😚": "assets/emojis/1f61a.png",
+    "😜": "assets/emojis/1f61c.png",
+    "😝": "assets/emojis/1f61d.png",
+    "😞": "assets/emojis/1f61e.png",
+    "😠": "assets/emojis/1f620.png",
+    "😡": "assets/emojis/1f621.png",
+    "😢": "assets/emojis/1f622.png",
+    "😣": "assets/emojis/1f623.png",
+    "😤": "assets/emojis/1f624.png",
+    "😥": "assets/emojis/1f625.png",
+    "😨": "assets/emojis/1f628.png",
+    "😩": "assets/emojis/1f629.png",
+    "😪": "assets/emojis/1f62a.png",
+    "😫": "assets/emojis/1f62b.png",
+    "😭": "assets/emojis/1f62d.png",
+    "😰": "assets/emojis/1f630.png",
+    "😱": "assets/emojis/1f631.png",
+    "😲": "assets/emojis/1f632.png",
+    "😳": "assets/emojis/1f633.png",
+    "😴": "assets/emojis/1f634.png",
+    "😵": "assets/emojis/1f635.png",
+    "😷": "assets/emojis/1f637.png",
+    "🌍": "assets/emojis/earth.png",
+    "🌤": "assets/emojis/suncloud.png",
+    "🌡": "assets/emojis/thermometer.png",
+    "🤔": "assets/emojis/thought.png",
+    "💧": "assets/emojis/droplet.png",
+    "🌬": "assets/emojis/dash.png",
+    "🎈": "assets/emojis/balloon.png",
+    "🌫": "assets/emojis/foggy.png",
+    "📡": "assets/emojis/1f4e1.png",
+    "🟢": "assets/emojis/1f7e2.png",
+    "🟡": "assets/emojis/1f7e1.png",
+    "🟠": "assets/emojis/1f7e0.png",
+    "🔴": "assets/emojis/1f534.png",
+    "🟣": "assets/emojis/1f7e3.png",
+    "☠️": "assets/emojis/skull.png",
+    "💡": "assets/emojis/1f4a1.png",
+    "💦": "assets/emojis/1f4a6.png",
+    "💬": "assets/emojis/1f4ac.png",
+    "💻": "assets/emojis/1f4bb.png",
+    "👌": "assets/emojis/1f44c.png",
+    "👍": "assets/emojis/1f44d.png",
+    "👏": "assets/emojis/1f44f.png",
+    "🔍": "assets/emojis/1f50d.png",
+    "🎉": "assets/emojis/1f389.png",
+    "✅": "assets/emojis/2705.png",
+    "❌": "assets/emojis/274c.png",
+};
+
+export function formatAiResponse(text) {
+    if (!text) return text;
+    let safeText = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    let formatted = safeText.replace(/\n/g, '<br>');
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+    const emojiKeys = Object.keys(retroEmojiMap);
+    const regex = new RegExp(emojiKeys.map(e => e.replace(/./g, "$&\\uFE0F?")).join('|'), 'g');
+    formatted = formatted.replace(regex, function (matched) {
+        const cleanKey = matched.replace(/\uFE0F/g, "");
+        const path = retroEmojiMap[cleanKey];
+        return path ? `<img src="${path}" class="retro-emoji" alt="${cleanKey}">` : matched;
+    });
+    return formatted;
+}
+
 // ==========================================
 // 辅助工具
 // ==========================================
@@ -15,6 +109,9 @@ import { sensitiveWords } from "../api/vocabulary.js";
  * 创建标准 JSON 响应
  */
 function jsonResponse(data, status = 200) {
+  if (data.reply && !data.html) {
+    data.html = formatAiResponse(data.reply);
+  }
   return new Response(JSON.stringify(data), {
     status,
     headers: {

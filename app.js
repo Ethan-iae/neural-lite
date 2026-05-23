@@ -1,87 +1,3 @@
-const retroEmojiMap = {
-            "🤣": "assets/emojis/1f601.png",
-            "🥺": "assets/emojis/1f625.png",
-            "😀": "assets/emojis/1f600.png",
-            "😁": "assets/emojis/1f601.png",
-            "😂": "assets/emojis/1f602.png",
-            "😃": "assets/emojis/1f603.png",
-            "😄": "assets/emojis/1f604.png",
-            "😅": "assets/emojis/1f605.png",
-            "😆": "assets/emojis/1f606.png",
-            "😇": "assets/emojis/1f607.png",
-            "😉": "assets/emojis/1f609.png",
-            "😊": "assets/emojis/1f60a.png",
-            "😋": "assets/emojis/1f60b.png",
-            "😌": "assets/emojis/1f60c.png",
-            "😍": "assets/emojis/1f60d.png",
-            "😎": "assets/emojis/1f60e.png",
-            "😏": "assets/emojis/1f60f.png",
-            "😐": "assets/emojis/1f610.png",
-            "😒": "assets/emojis/1f612.png",
-            "😓": "assets/emojis/1f613.png",
-            "😔": "assets/emojis/1f614.png",
-            "😖": "assets/emojis/1f616.png",
-            "😘": "assets/emojis/1f618.png",
-            "😚": "assets/emojis/1f61a.png",
-            "😜": "assets/emojis/1f61c.png",
-            "😝": "assets/emojis/1f61d.png",
-            "😞": "assets/emojis/1f61e.png",
-            "😠": "assets/emojis/1f620.png",
-            "😡": "assets/emojis/1f621.png",
-            "😢": "assets/emojis/1f622.png",
-            "😣": "assets/emojis/1f623.png",
-            "😤": "assets/emojis/1f624.png",
-            "😥": "assets/emojis/1f625.png",
-            "😨": "assets/emojis/1f628.png",
-            "😩": "assets/emojis/1f629.png",
-            "😪": "assets/emojis/1f62a.png",
-            "😫": "assets/emojis/1f62b.png",
-            "😭": "assets/emojis/1f62d.png",
-            "😰": "assets/emojis/1f630.png",
-            "😱": "assets/emojis/1f631.png",
-            "😲": "assets/emojis/1f632.png",
-            "😳": "assets/emojis/1f633.png",
-            "😴": "assets/emojis/1f634.png",
-            "😵": "assets/emojis/1f635.png",
-            "😷": "assets/emojis/1f637.png",
-            "🌍": "assets/emojis/earth.png",
-            "🌤": "assets/emojis/suncloud.png",
-            "🌡": "assets/emojis/thermometer.png",
-            "🤔": "assets/emojis/thought.png",
-            "💧": "assets/emojis/droplet.png",
-            "🌬": "assets/emojis/dash.png",
-            "🎈": "assets/emojis/balloon.png",
-            "🌫": "assets/emojis/foggy.png",
-            "😷": "assets/emojis/face.png",
-            "📡": "assets/emojis/1f4e1.png",
-            "🟢": "assets/emojis/1f7e2.png",
-            "🟡": "assets/emojis/1f7e1.png",
-            "🟠": "assets/emojis/1f7e0.png",
-            "🔴": "assets/emojis/1f534.png",
-            "🟣": "assets/emojis/1f7e3.png",
-            "☠️": "assets/emojis/skull.png",
-            "💡": "assets/emojis/1f4a1.png",
-            "💦": "assets/emojis/1f4a6.png",
-            "💬": "assets/emojis/1f4ac.png",
-            "💻": "assets/emojis/1f4bb.png",
-            "👌": "assets/emojis/1f44c.png",
-            "👍": "assets/emojis/1f44d.png",
-            "👏": "assets/emojis/1f44f.png",
-            "🔍": "assets/emojis/1f50d.png",
-            "🎉": "assets/emojis/1f389.png",
-            "✅": "assets/emojis/2705.png",
-            "❌": "assets/emojis/274c.png",
-        };
-        function renderRetroEmojis(text) {
-            if (!text) return text;
-            const emojiKeys = Object.keys(retroEmojiMap);
-            const regex = new RegExp(emojiKeys.map(e => e.replace(/./g, "$&\\uFE0F?")).join('|'), 'g');
-            return text.replace(regex, function (matched) {
-                const cleanKey = matched.replace(/\uFE0F/g, "");
-                const path = retroEmojiMap[cleanKey];
-                return path ? `<img src="${path}" class="retro-emoji" alt="${cleanKey}">` : matched;
-            });
-        }
 
 const SOUND_URLS = {
             sent: 'assets/sounds/sent.mp3',
@@ -268,11 +184,11 @@ const SOUND_URLS = {
                     if (data.reply) {
                         finalResponse = data.reply.trim();
                         this.saveContext(text, finalResponse);
-                        return finalResponse;
+                        return { text: finalResponse, html: data.html };
                     } else if (data.error) {
                         finalResponse = "【系统错误】" + data.error + (data.details ? ": " + data.details : "");
                         this.saveContext(text, finalResponse);
-                        return finalResponse;
+                        return { text: finalResponse, html: escapeHTML(finalResponse) };
                     } else {
                         throw new Error("模型返回异常，缺少回复内容");
                     }
@@ -280,7 +196,7 @@ const SOUND_URLS = {
                     console.error("请求失败:", e);
                     finalResponse = "我的云端神经元似乎断线了... (" + e.message + ")";
                     this.saveContext(text, finalResponse);
-                    return finalResponse;
+                    return { text: finalResponse, html: escapeHTML(finalResponse) };
                 }
             }
         }
@@ -339,10 +255,10 @@ const SOUND_URLS = {
                         bubble.innerHTML = '<i>正在思考中...</i>';
                     }
                 }, 5000);
-                const replyText = await brain.process(text);
+                const replyObj = await brain.process(text);
                 clearTimeout(thinkingTimeout);
                 setTimeout(() => {
-                    updateTypingBubble(typingId, replyText);
+                    updateTypingBubble(typingId, replyObj.text, replyObj.html);
                 }, 900);
             }, 670);
         }
@@ -356,44 +272,7 @@ const SOUND_URLS = {
                     '"': '&quot;'
                 }[tag]));
         }
-        function addBubble(text, role, isHistory = false) {
-            const row = document.createElement('div');
-            row.className = `message-row ${role}`;
-            if (role === 'ai' && !isHistory) {
-                playSound('recv');
-            }
-            const avatarDiv = document.createElement('div');
-            avatarDiv.className = `avatar ${role}-avatar`;
-            avatarDiv.textContent = role === 'ai' ? 'AI' : 'Me';
-            const bubbleDiv = document.createElement('div');
-            bubbleDiv.className = `bubble ${role}-bubble`;
-            if (role === 'user') {
-                bubbleDiv.textContent = text;
-            } else {
-                let safeText = text
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-                let formatted = safeText.replace(/\n/g, '<br>');
-                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                formatted = renderRetroEmojis(formatted);
-                bubbleDiv.innerHTML = formatted;
-            }
-            if (role === 'ai') {
-                row.appendChild(avatarDiv);
-                row.appendChild(bubbleDiv);
-            } else {
-                row.appendChild(bubbleDiv);
-                row.appendChild(avatarDiv);
-            }
-            chatBox.appendChild(row);
-            scrollToBottom();
-            if (!isHistory) {
-                saveChatLog(text, role);
-            }
-        }
+
         function scrollToBottom() {
             const chatBox = document.getElementById('chat-container');
             const threshold = 5;
@@ -440,9 +319,9 @@ let lastMessageTime = 0;
             divider.textContent = formatTime(timestamp);
             chatBox.appendChild(divider);
         }
-        function saveChatLog(text, role, timestamp) {
+        function saveChatLog(text, role, timestamp, html = null) {
             let logs = JSON.parse(localStorage.getItem('chat_logs')) || [];
-            logs.push({ text: text, role: role, timestamp: timestamp });
+            logs.push({ text: text, role: role, timestamp: timestamp, html: html });
             localStorage.setItem('chat_logs', JSON.stringify(logs));
         }
         function loadChatHistory() {
@@ -455,10 +334,10 @@ let lastMessageTime = 0;
             }
             logs.forEach(log => {
                 let ts = log.timestamp || Date.now();
-                addBubble(log.text, log.role, true, ts);
+                addBubble(log.text, log.role, true, ts, log.html);
             });
         }
-        function addBubble(text, role, isHistory = false, timestamp = null) {
+        function addBubble(text, role, isHistory = false, timestamp = null, html = null) {
             if (!timestamp) timestamp = Date.now();
             if (window.isFirstSessionMessage && !isHistory) {
                 window.isFirstSessionMessage = false;
@@ -479,16 +358,11 @@ let lastMessageTime = 0;
             if (role === 'user') {
                 bubbleDiv.textContent = text;
             } else {
-                let safeText = text
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-                let formatted = safeText.replace(/\n/g, '<br>');
-                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                formatted = renderRetroEmojis(formatted);
-                bubbleDiv.innerHTML = formatted;
+                if (html) {
+                    bubbleDiv.innerHTML = html;
+                } else {
+                    bubbleDiv.innerHTML = escapeHTML(text).replace(/\n/g, '<br>');
+                }
             }
             if (role === 'ai') {
                 row.appendChild(avatarDiv);
@@ -501,7 +375,7 @@ let lastMessageTime = 0;
             chatBox.appendChild(row);
             scrollToBottom();
             if (!isHistory) {
-                saveChatLog(text, role, timestamp);
+                saveChatLog(text, role, timestamp, html);
             }
         }
         loadChatHistory();
@@ -693,17 +567,12 @@ let lastMessageTime = 0;
             scrollToBottom();
             return id;
         }
-        function updateTypingBubble(rowId, text) {
+        function updateTypingBubble(rowId, text, html) {
             const bubbleDiv = document.getElementById(rowId + '-bubble');
             if (!bubbleDiv) return;
-            let safeText = text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-            let formatted = safeText.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-            formatted = renderRetroEmojis(formatted);
+            
+            let formatted = html ? html : escapeHTML(text).replace(/\n/g, '<br>');
+
             const startWidth = bubbleDiv.offsetWidth;
             const startHeight = bubbleDiv.offsetHeight;
             bubbleDiv.style.transition = 'none';
@@ -738,6 +607,6 @@ let lastMessageTime = 0;
             }, 300);
             const timestamp = Date.now();
             lastMessageTime = timestamp;
-            saveChatLog(text, 'ai', timestamp);
+            saveChatLog(text, 'ai', timestamp, html);
         }
 
