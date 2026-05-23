@@ -417,18 +417,43 @@ export async function processGeminiRequest({
     ],
   };
 
-  try {
-    const geminiRes = await fetch(targetUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey,
-        "cf-aig-authorization": env.CF_AIG_TOKEN,
-      },
-      body: JSON.stringify(requestBody),
-    });
+  let data = null;
+  let maxRetries = 2;
+  let retryCount = 0;
 
-    const data = await geminiRes.json();
+  while (retryCount <= maxRetries) {
+    try {
+      const geminiRes = await fetch(targetUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+          "cf-aig-authorization": env.CF_AIG_TOKEN,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      data = await geminiRes.json();
+
+      if (data.error && (data.error.code === 500 || data.error.code === 503)) {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          await new Promise(r => setTimeout(r, 1500 * retryCount));
+          continue;
+        }
+      }
+      break;
+    } catch (err) {
+      if (retryCount < maxRetries) {
+        retryCount++;
+        await new Promise(r => setTimeout(r, 1500 * retryCount));
+        continue;
+      }
+      return jsonResponse({ error: "Gemini API Error", details: err.message }, 500);
+    }
+  }
+
+  try {
 
     // 处理提问阶段拦截
     if (data.promptFeedback && data.promptFeedback.blockReason) {
