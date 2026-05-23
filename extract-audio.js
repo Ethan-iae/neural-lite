@@ -8,7 +8,6 @@ const path = require('path');
 
 const appJs = fs.readFileSync(path.join(__dirname, 'app.js'), 'utf8');
 
-// Extract the three base64 data URIs using regex
 const sentMatch = appJs.match(/const SENT_SOUND_DATA\s*=\s*"(data:audio\/[^"]+)"/);
 const recvMatch = appJs.match(/const RECV_SOUND_DATA\s*=\s*"(data:audio\/[^"]+)"/);
 const switchMatch = appJs.match(/const SWITCH_SOUND_DATA\s*=\s*"(data:audio\/[^"]+)"/);
@@ -18,7 +17,6 @@ if (!sentMatch || !recvMatch || !switchMatch) {
     process.exit(1);
 }
 
-// Create output directory
 const outDir = path.join(__dirname, 'assets', 'sounds');
 fs.mkdirSync(outDir, { recursive: true });
 

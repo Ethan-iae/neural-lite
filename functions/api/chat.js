@@ -14,7 +14,6 @@ export async function onRequestPost(context) {
         return new Response(JSON.stringify({ reply: "..." }), { headers: { 'Content-Type': 'application/json' } });
     }
 
-    // --- Optimized Backend Weather Logic (No Loopback, Original Style) ---
     const weatherKeywords = ["天气", "气温", "多少度", "下雨吗", "天儿"];
     if (weatherKeywords.some(k => message.includes(k))) {
         let city = message.replace(/天气|气温|多少度|怎么样|查询|查一下|今天|现在|的|我|想|知道|看看|这里|那里|环境|指数|空气|质量|预报|下雨吗|天儿/g, "").trim();
@@ -50,7 +49,6 @@ export async function onRequestPost(context) {
                 const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m&timezone=auto`;
                 const omAqiUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&current=us_aqi,pm2_5&timezone=auto`;
                 
-                // --- 1:1 Restore WAQI logic (avoiding internal fetch) ---
                 const waqiToken = env.WAQI_API_KEY;
                 const waqiGeoUrl = `https://api.waqi.info/feed/geo:${lat};${lng}/?token=${waqiToken}`;
                 const waqiSearchUrl = `https://api.waqi.info/search/?token=${waqiToken}&keyword=${encodeURIComponent(cleanCity)}`;
@@ -87,7 +85,6 @@ export async function onRequestPost(context) {
 
                 let aqiSuccess = false;
                 
-                // --- 1:1 Restore original waqi.js search logic ---
                 if (waqiSearchRes.status === 'fulfilled' && waqiSearchRes.value?.status === 'ok' && waqiSearchRes.value.data?.length > 0) {
                     for (let i = 0; i < Math.min(waqiSearchRes.value.data.length, 5); i++) {
                         const stationData = waqiSearchRes.value.data[i];
@@ -101,7 +98,6 @@ export async function onRequestPost(context) {
                     }
                 }
 
-                // Method 2: Geo-location feed (Backup if search fails)
                 if (!aqiSuccess && waqiGeoRes.status === 'fulfilled' && waqiGeoRes.value?.status === 'ok') {
                     const val = parseInt(waqiGeoRes.value.data?.aqi);
                     if (!isNaN(val)) {
@@ -111,7 +107,6 @@ export async function onRequestPost(context) {
                     }
                 }
 
-                // Method 3: Satellite estimation (Final fallback)
                 if (!aqiSuccess && omAqiRes.status === 'fulfilled' && omAqiRes.value?.current?.us_aqi !== undefined) {
                     const aqiVal = omAqiRes.value.current.us_aqi;
                     const pm25 = omAqiRes.value.current.pm2_5;
@@ -130,9 +125,7 @@ export async function onRequestPost(context) {
             console.error("精细天气查询失败:", e);
         }
     }
-    // ------------------------------------------------------------
 
-    // --- 直接调用 Gemini 核心逻辑（不再使用 loopback HTTP 子请求）---
     const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown-ip';
 
     const geminiResponse = await processGeminiRequest({
@@ -150,7 +143,6 @@ export async function onRequestPost(context) {
         },
     });
 
-    // 将 memory 附加到响应中
     try {
         const geminiData = await geminiResponse.clone().json();
         return new Response(JSON.stringify({ ...geminiData, memory: memory }), {
@@ -158,7 +150,6 @@ export async function onRequestPost(context) {
             headers: { 'Content-Type': 'application/json' },
         });
     } catch (e) {
-        // 如果响应不是 JSON（不太可能），直接返回
         return geminiResponse;
     }
 }

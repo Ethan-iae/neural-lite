@@ -40,9 +40,6 @@ export async function onRequestPost(context) {
   });
 }
 
-// ==========================================
-// 🌐 处理跨域请求 (CORS) 预检
-// ==========================================
 export async function onRequestOptions() {
   return handleOptions();
 }

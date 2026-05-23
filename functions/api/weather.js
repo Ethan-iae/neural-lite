@@ -46,7 +46,6 @@ export async function onRequest(context) {
         const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m&timezone=auto`;
         const omAqiUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&current=us_aqi,pm2_5&timezone=auto`;
         
-        // 调用同环境下的 waqi 接口
         const waqiUrl = new URL(`/api/waqi?city=${encodeURIComponent(resolvedCity)}`, request.url).toString();
 
         const [weatherData, waqiData, omAqiData] = await Promise.allSettled([
