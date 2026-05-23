@@ -411,7 +411,6 @@ let lastMessageTime = 0;
                 let now = Date.now();
                 if (chatBox) {
                     chatBox.innerHTML = `
-            <div class="time-divider">${formatTime(now)}</div>
             <div class="message-row">
                 <div class="avatar ai-avatar">AI</div>
                 <div class="bubble ai-bubble">
@@ -424,7 +423,8 @@ let lastMessageTime = 0;
                     </ul>
                     <div class="similarity-score">系统消息</div>
                 </div>
-            </div>`;
+            </div>
+            <div class="time-divider">${formatTime(now)}</div>`;
                 }
                 if (window.brain) {
                     window.brain.memory = { name: "朋友", topic: null, mood: 0 };
