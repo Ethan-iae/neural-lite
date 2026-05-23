@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Neural-Lite Web App",
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node build-vocabulary.js && node build.mjs"
   },
   "devDependencies": {
     "clean-css": "^5.3.3",

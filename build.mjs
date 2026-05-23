@@ -65,7 +65,7 @@ async function build() {
         console.log('Obfuscated app.js');
     }
     
-    const copyList = ['assets', 'Vocabulary', 'alien-monster_1f47e.png', 'words.json'];
+    const copyList = ['assets', 'Vocabulary', 'alien-monster_1f47e.png'];
     for (const item of copyList) {
         if (fs.existsSync(item)) {
             fs.copySync(item, `dist/${item}`);
