@@ -408,8 +408,10 @@ let lastMessageTime = 0;
             
             setTimeout(() => {
                 const chatBox = document.getElementById('chat-container');
+                let now = Date.now();
                 if (chatBox) {
                     chatBox.innerHTML = `
+            <div class="time-divider">${formatTime(now)}</div>
             <div class="message-row">
                 <div class="avatar ai-avatar">AI</div>
                 <div class="bubble ai-bubble">
@@ -429,7 +431,7 @@ let lastMessageTime = 0;
                     window.brain.history = [];
                 }
                 window.isFirstSessionMessage = true;
-                lastMessageTime = 0;
+                lastMessageTime = now;
             }, 250);
 
             localStorage.removeItem('neural_lite_width');
