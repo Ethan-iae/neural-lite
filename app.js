@@ -441,6 +441,8 @@ let lastMessageTime = 0;
             if (frame && window.innerWidth > 768) {
                 frame.style.width = '';
                 frame.style.height = '';
+                frame.style.maxWidth = '';
+                frame.style.maxHeight = '';
                 frame.style.margin = '';
                 frame.style.position = '';
                 frame.style.left = '';
