@@ -158,7 +158,6 @@ const SOUND_URLS = {
                 let finalResponse = null;
 
                 try {
-                    // Call the new unified backend endpoint
                     const response = await fetch('/api/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -438,7 +437,6 @@ let lastMessageTime = 0;
             localStorage.removeItem('neural_lite_left');
             localStorage.removeItem('neural_lite_top');
             
-            // Revert window to original state
             const frame = document.querySelector('.window-frame');
             if (frame && window.innerWidth > 768) {
                 frame.style.width = '';
