@@ -1,0 +1,14 @@
+{
+  "name": "neural-lite",
+  "version": "1.0.0",
+  "description": "Neural-Lite Web App",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "fs-extra": "^11.2.0",
+    "html-minifier-terser": "^7.2.0",
+    "javascript-obfuscator": "^4.1.0"
+  }
+}
