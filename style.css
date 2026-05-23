@@ -625,12 +625,15 @@
             .header h1 {
                 cursor: pointer;
                 user-select: none;
-                text-decoration: underline dotted #666;
                 position: static;
                 transform: none;
                 left: auto;
                 margin: 0;
                 letter-spacing: -0.2px !important;
+            }
+
+            .header h1 span:nth-child(2) {
+                text-decoration: underline dotted #666;
             }
 
             .responsive-title {
@@ -724,6 +727,19 @@
 
             .window-controls {
                 display: none;
+            }
+
+            .input-wrapper::after,
+            .resize-handle {
+                display: none !important;
+            }
+
+            #emoji-btn {
+                display: none !important;
+            }
+
+            #user-input {
+                padding-right: 12px !important;
             }
         }
 
