@@ -88,7 +88,7 @@ onUnmounted(() => document.removeEventListener('click', closePanel));
           <img 
             v-for="code in commonEmojis" 
             :key="code" 
-            :src="`/assets/emojis/${code}.png`" 
+            :src="`/assets/emojis/${code}.webp`" 
             @click="insertEmojiText(code)"
             style="width: 24px; height: 24px; cursor: pointer;"
             :title="code"

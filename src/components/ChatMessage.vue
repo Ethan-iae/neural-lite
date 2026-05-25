@@ -17,7 +17,7 @@ const formatHtml = computed(() => {
   }
   let out = props.html || props.text;
   // Parse emoji tags: [emoji:1f600]
-  out = out.replace(/\[emoji:([a-zA-Z0-9_-]+)\]/g, '<img src="/assets/emojis/$1.png" style="width: 20px; height: 20px; vertical-align: middle; display: inline-block;">');
+  out = out.replace(/\[emoji:([a-zA-Z0-9_-]+)\]/g, '<img src="/assets/emojis/$1.webp" style="width: 20px; height: 20px; vertical-align: middle; display: inline-block;">');
   return out;
 });
 </script>
