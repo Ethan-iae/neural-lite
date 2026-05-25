@@ -13,14 +13,17 @@ const { playSound, aggressiveWakeUp } = useAudio();
 const showModal = ref(false);
 const frameRef = ref<HTMLElement | null>(null);
 
-onMounted(() => {
+onMounted(async () => {
   loadMemory();
   loadChatHistory();
-  setTimeout(() => {
-    document.body.classList.remove('preload');
-    const antiFlashStyle = document.getElementById('anti-flash');
-    if (antiFlashStyle) antiFlashStyle.remove();
-  }, 100);
+  
+  // Wait for all fonts to finish loading
+  await document.fonts.ready;
+  
+  document.body.classList.add('fonts-loaded');
+  document.body.classList.remove('preload');
+  const antiFlashStyle = document.getElementById('anti-flash');
+  if (antiFlashStyle) antiFlashStyle.remove();
 
   if (window.innerWidth > 768 && frameRef.value) {
     const savedWidth = localStorage.getItem('neural_lite_width');
