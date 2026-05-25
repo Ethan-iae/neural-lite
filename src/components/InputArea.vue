@@ -67,9 +67,7 @@ onUnmounted(() => document.removeEventListener('click', closePanel));
         <div 
           class="emoji-btn" 
           @click="toggleEmojiPanel"
-          style="position: absolute; right: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; opacity: 0.5; transition: opacity 0.2s;"
-          @mouseover="$event.currentTarget.style.opacity='0.8'" 
-          @mouseout="$event.currentTarget.style.opacity='0.5'"
+          style="position: absolute; right: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px;"
         >
           <svg width="8" height="6" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6L0.535898 0.75L7.4641 0.75L4 6Z" fill="#333" />
@@ -102,3 +100,13 @@ onUnmounted(() => document.removeEventListener('click', closePanel));
     <div class="resize-handle" title="拖拽调整大小"></div>
   </div>
 </template>
+
+<style scoped>
+.emoji-btn {
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.emoji-btn:hover {
+  opacity: 0.8;
+}
+</style>
