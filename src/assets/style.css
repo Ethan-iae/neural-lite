@@ -960,8 +960,12 @@
         }
 
         @media screen and (min-width: 769px) {
+            #send-btn {
+                display: none !important;
+            }
+
             .input-box {
-                gap: 10px;
+                gap: 0;
             }
 
             .input-box input {

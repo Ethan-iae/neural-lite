@@ -95,7 +95,7 @@ onUnmounted(() => document.removeEventListener('click', closePanel));
           />
         </div>
       </div>
-      <button class="primary" @click="handleSend">发送</button>
+      <button id="send-btn" class="primary" @click="handleSend">发送</button>
     </div>
     <div class="resize-handle" title="拖拽调整大小"></div>
   </div>
