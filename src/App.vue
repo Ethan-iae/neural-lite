@@ -180,7 +180,7 @@ const handleSend = async (text: string) => {
     const idx = messages.value.findIndex(m => m.id === typingId);
     if (idx !== -1) {
       messages.value[idx] = {
-        id: typingId,
+        id: 'ai-' + Date.now(), // Generate a new ID to trigger macMessagePop animation
         role: 'ai',
         text: replyObj?.text || '',
         html: replyObj?.html || '',

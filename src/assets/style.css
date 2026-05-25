@@ -566,6 +566,17 @@
             will-change: transform, opacity;
         }
 
+        .chat-list-leave-active {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            z-index: 0;
+        }
+        
+        .chat-list-leave-to {
+            opacity: 0;
+            transform: scale(0.9) translateY(-10px);
+        }
+
         .message-row.user {
             transform-origin: bottom right;
         }
