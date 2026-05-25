@@ -62,7 +62,7 @@ onMounted(() => {
   <div id="chat-container" ref="chatContainer">
     <template v-for="(msg, index) in messages" :key="msg.id">
       <div 
-        v-if="index === 0 || (msg.timestamp - messages[index-1].timestamp > 60000)" 
+        v-if="msg.id !== 'system-1' && (index === 0 || (msg.timestamp - messages[index-1].timestamp > 300000))" 
         class="time-divider"
       >
         {{ formatTime(msg.timestamp) }}
