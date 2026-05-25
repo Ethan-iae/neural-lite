@@ -10,6 +10,26 @@
     <link rel="preconnect" href="https://fonts.loli.net">
     <link rel="preconnect" href="https://gstatic.loli.net" crossorigin>
     <link href="https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;700&display=block" rel="stylesheet">
+    <style>
+      body {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease-out;
+      }
+      body.fonts-loaded {
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+    <script>
+      document.fonts.ready.then(() => {
+        document.body.classList.add('fonts-loaded');
+      });
+      // Fallback
+      setTimeout(() => {
+        document.body.classList.add('fonts-loaded');
+      }, 1500);
+    </script>
   </head>
   <body>
     <div id="app"></div>
