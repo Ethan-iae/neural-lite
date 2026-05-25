@@ -1,122 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.loli.net; font-src 'self' https://gstatic.loli.net; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self';">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content, maximum-scale=1.0, user-scalable=no" />
     <title>Neural-Lite</title>
-    <link rel="icon" type="image/png" href="alien-monster_1f47e.png">
+    <link rel="icon" type="image/png" href="/alien-monster_1f47e.png" />
     <link rel="preconnect" href="https://fonts.loli.net">
     <link rel="preconnect" href="https://gstatic.loli.net" crossorigin>
-    <link
-        href="https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body class="preload">
-    <div class="window-frame">
-        <div class="header">
-            <div class="window-controls">
-                <div class="win-btn close" onclick="resetSystem()" style="cursor: pointer;" title="重置并清空记忆"></div>
-                <div class="win-btn min"></div>
-                <div class="win-btn max"></div>
-            </div>
-            <h1>
-                <span></span>
-                <span class="responsive-title" onclick="resetSystem()">Neural-Lite</span>
-                <span class="responsive-title" style="font-weight:normal; opacity:0.6; font-size: 0.9em;"> v1.2</span>
-            </h1>
-            <div class="status" id="db-status">
-                <span>在线</span>
-            </div>
-        </div>
-        
-        <div id="custom-modal" class="modal-overlay">
-            <div class="modal-window">
-                <div class="modal-header"></div>
-                <div class="modal-body">
-                    <div class="modal-icon">
-                        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="alert-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#ffe138" />
-                                    <stop offset="100%" stop-color="#f5a623" />
-                                </linearGradient>
-                                <filter id="alert-shadow" x="-10%" y="-10%" width="120%" height="120%">
-                                    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.3" />
-                                </filter>
-                            </defs>
-                            <path d="M32 4 L4 56 L60 56 Z" fill="url(#alert-grad)" filter="url(#alert-shadow)"
-                                stroke="#d68f00" stroke-width="1" />
-                            <path d="M32 22 L32 40" stroke="#fff" stroke-width="5" stroke-linecap="round"
-                                filter="drop-shadow(0 1px 1px rgba(0,0,0,0.2))" />
-                            <circle cx="32" cy="48" r="3" fill="#fff" filter="drop-shadow(0 1px 1px rgba(0,0,0,0.2))" />
-                        </svg>
-                    </div>
-                    <div class="modal-text">
-                        <h2>确定要清除系统记忆吗？</h2>
-                        <p>如果执行此操作，所有聊天记录和 AI 记忆将被永久删除，此操作无法撤销。</p>
-                    </div>
-                </div>
-                <div class="modal-buttons">
-                    <button class="secondary" onclick="closeModal()">取消</button>
-                    <button class="primary" onclick="confirmResetAction()">清除</button>
-                </div>
-            </div>
-        </div>
-        <div id="chat-container">
-            <div class="message-row">
-                <div class="avatar ai-avatar">AI</div>
-                <div class="bubble ai-bubble">
-                    你好！ 我是连接云端大模型的 AI ，很高兴协助你。 <br>
-                    <br>
-                    试试问我：
-                    <ul>
-                        <li>“人类存在的意义是什么?”</li>
-                        <li>“北京今天的天气怎么样?”</li>
-                    </ul>
-                    <div class="similarity-score">系统消息</div>
-                </div>
-            </div>
-        </div>
-        <div class="input-wrapper">
-            <div class="input-box">
-                <div style="position: relative; flex: 1; display: flex; align-items: center;">
-                    <input type="search" id="user-input" maxlength="200" placeholder="在此输入消息..." autocomplete="off"
-                        onkeypress="handleEnter(event)">
-                    <div id="emoji-btn" onclick="toggleEmojiPanel(event)"
-                        style="position: absolute; right: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; opacity: 0.5; transition: opacity 0.2s;"
-                        onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=0.5">
-                        <svg width="8" height="6" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 6L0.535898 0.75L7.4641 0.75L4 6Z" fill="#333" />
-                        </svg>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                            <line x1="9" y1="9" x2="9.01" y2="9" />
-                            <line x1="15" y1="9" x2="15.01" y2="9" />
-                        </svg>
-                    </div>
-                    <div id="emoji-panel"
-                        style="display: none; position: absolute; bottom: 40px; right: 0; width: 220px; background: #ececec; border: 1px solid #999; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; padding: 10px; grid-template-columns: repeat(6, 1fr); gap: 5px;">
-                    </div>
-                </div>
-                <button id="send-btn" class="primary">发送</button>
-            </div>
-            <div class="resize-handle" title="拖拽调整大小"></div>
-        </div>
-    </div>
-    </div>
-
-
-
-
-    <script src="app.js"></script>
-</body>
-
+    <link href="https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
