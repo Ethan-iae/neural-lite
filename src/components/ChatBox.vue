@@ -63,7 +63,7 @@ onMounted(() => {
     <template v-for="(msg, index) in messages" :key="msg.id">
       <!-- Normal time dividers (skipped for index 1 since the system message has a trailing timeline) -->
       <div 
-        v-if="msg.id !== 'system-1' && index > 1 && (msg.timestamp - messages[index-1].timestamp > 300000)" 
+        v-if="index > 1 && (msg.timestamp - messages[index-1].timestamp > 300000)" 
         class="time-divider"
       >
         {{ formatTime(msg.timestamp) }}
@@ -78,7 +78,7 @@ onMounted(() => {
 
       <!-- Fixed timeline immediately below the system welcome message -->
       <div 
-        v-if="msg.id === 'system-1'" 
+        v-if="index === 0" 
         class="time-divider"
       >
         {{ formatTime(msg.timestamp) }}
