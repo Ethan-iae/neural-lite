@@ -1,13 +1,13 @@
 import { reactive, ref } from 'vue';
 
-export interface ChatMemory {
+interface ChatMemory {
   name: string;
   topic: string | null;
   mood: number;
   [key: string]: any;
 }
 
-export interface ChatHistoryItem {
+interface ChatHistoryItem {
   q: string;
   a: string;
 }
@@ -21,7 +21,7 @@ export interface ChatMessageItem {
   isTyping?: boolean;
 }
 
-export function escapeHTML(str: string) {
+function escapeHTML(str: string) {
   return str.replace(/[&<>'"]/g, (tag) => {
     const chars: Record<string, string> = {
       '&': '&amp;',

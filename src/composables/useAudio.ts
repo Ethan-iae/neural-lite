@@ -43,7 +43,7 @@ async function loadSound(key: string, url: string) {
   }
 }
 
-export function initAudioSystem() {
+function initAudioSystem() {
   loadSound('sent', SOUND_URLS.sent);
   setTimeout(() => {
     loadSound('recv', SOUND_URLS.recv);
@@ -67,13 +67,13 @@ export function initAudioSystem() {
   }, 8000);
 }
 
-export function checkAndResumeAudio() {
+function checkAndResumeAudio() {
   if (audioCtx.state === 'suspended') {
     audioCtx.resume();
   }
 }
 
-export function initialUnlock() {
+function initialUnlock() {
   if (hasUserInteracted) return;
   hasUserInteracted = true;
   if (audioCtx.state !== 'running') {
@@ -91,7 +91,7 @@ export function initialUnlock() {
   source.start(0);
 }
 
-export function playSound(type: 'sent' | 'recv' | 'switch') {
+function playSound(type: 'sent' | 'recv' | 'switch') {
   try {
     checkAndResumeAudio();
     const buffer = soundBuffers[type];
@@ -108,7 +108,7 @@ export function playSound(type: 'sent' | 'recv' | 'switch') {
   }
 }
 
-export function aggressiveWakeUp() {
+function aggressiveWakeUp() {
   if (audioCtx.state === 'suspended') {
     audioCtx.resume();
   }
