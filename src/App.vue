@@ -162,12 +162,20 @@ const handleSend = async (text: string) => {
     messages.value.push({
       id: typingId,
       role: 'ai',
-      text: '正在思考中...',
+      text: '', // Empty text shows typing dots initially
       isTyping: true,
       timestamp: Date.now()
     });
 
+    const thinkingTimeout = setTimeout(() => {
+      const idx = messages.value.findIndex(m => m.id === typingId);
+      if (idx !== -1 && messages.value[idx].isTyping) {
+        messages.value[idx].text = '正在思考中...';
+      }
+    }, 5000);
+
     const replyObj = await processInput(text);
+    clearTimeout(thinkingTimeout);
     
     const idx = messages.value.findIndex(m => m.id === typingId);
     if (idx !== -1) {

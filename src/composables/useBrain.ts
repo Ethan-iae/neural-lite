@@ -141,7 +141,7 @@ export function useBrain() {
 
       if (data.reply) {
         finalResponse = data.reply.trim();
-        finalHtml = data.html || escapeHTML(finalResponse).replace(/\\n/g, '<br>');
+        finalHtml = data.html || escapeHTML(finalResponse).replace(/\n/g, '<br>');
         saveContext(text, finalResponse);
       } else if (data.error) {
         finalResponse = '【系统错误】' + data.error + (data.details ? ': ' + data.details : '');
