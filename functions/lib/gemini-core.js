@@ -372,7 +372,7 @@ export async function processGeminiRequest({
   }
 
   const cfGatewayUrl = env.CF_GATEWAY_URL;
-  const targetUrl = `${cfGatewayUrl}/v1beta/models/${modelName}:generateContent`;
+  const targetUrl = `${cfGatewayUrl}/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
   const requestBody = {
     contents: contents,
