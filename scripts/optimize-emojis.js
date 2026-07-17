@@ -24,7 +24,6 @@ async function optimizeEmojis() {
           .webp({ quality: 80, lossless: false })
           .toFile(webpPath);
           
-        // Delete original PNG
         await fs.unlink(filePath);
         convertedCount++;
       }

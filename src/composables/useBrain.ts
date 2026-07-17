@@ -34,7 +34,6 @@ function escapeHTML(str: string) {
   });
 }
 
-// Global state
 const memory = reactive<ChatMemory>({
   name: '朋友',
   topic: null,
@@ -77,7 +76,6 @@ export function useBrain() {
   const loadChatHistory = () => {
     const logs = JSON.parse(localStorage.getItem('chat_logs') || '[]');
     if (logs.length === 0) {
-      // First session
       const now = Date.now();
       messages.value.push({
         id: 'welcome-' + now,
@@ -98,7 +96,6 @@ export function useBrain() {
   };
 
   const saveChatLog = () => {
-    // Only save non-typing messages
     const logsToSave = messages.value
       .filter((m) => !m.isTyping)
       .map((m) => ({
@@ -164,7 +161,6 @@ export function useBrain() {
     localStorage.removeItem('chat_logs');
     localStorage.removeItem('neural_lite_memory');
     
-    // Clear styles saved in localstorage
     localStorage.removeItem('neural_lite_width');
     localStorage.removeItem('neural_lite_height');
     localStorage.removeItem('neural_lite_left');
@@ -174,7 +170,6 @@ export function useBrain() {
     history.value = [];
     messages.value = [];
     
-    // re-init
     loadChatHistory();
   };
 

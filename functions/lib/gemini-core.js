@@ -1,9 +1,3 @@
-/**
- * gemini-core.js — 共享 Gemini API 核心逻辑
- * 
- * 提取自 gemini.js，供 chat.js 和 gemini.js 共同调用。
- * 消除了 loopback HTTP 子请求，改为直接函数调用。
- */
 
 import { sensitiveWords } from "../api/vocabulary.js";
 
@@ -101,13 +95,7 @@ export function formatAiResponse(text) {
     return formatted;
 }
 
-// ==========================================
-// 辅助工具
-// ==========================================
 
-/**
- * 创建标准 JSON 响应
- */
 function jsonResponse(data, status = 200) {
   if (data.reply && !data.html) {
     data.html = formatAiResponse(data.reply);
@@ -121,9 +109,6 @@ function jsonResponse(data, status = 200) {
   });
 }
 
-/**
- * 处理 CORS 预检请求
- */
 export function handleOptions() {
   return new Response(null, {
     headers: {
@@ -134,9 +119,6 @@ export function handleOptions() {
   });
 }
 
-// ==========================================
-// 核心处理函数
-// ==========================================
 
 /**
  * 处理 Gemini 聊天请求的完整逻辑。
@@ -164,7 +146,6 @@ export async function processGeminiRequest({
   cfData,
   geoHeaders,
 }) {
-  // --- 维护模式 ---
   if (env.MAINTENANCE_MODE === "true") {
     return jsonResponse({
       reply:
@@ -172,7 +153,6 @@ export async function processGeminiRequest({
     });
   }
 
-  // --- 对话长度限制 ---
   if (history.length >= 60) {
     return jsonResponse({
       reply:
@@ -180,10 +160,8 @@ export async function processGeminiRequest({
     });
   }
 
-  // --- 管理员指令 ---
   const ADMIN_COMMAND = env.ADMIN_PASSWORD;
   if (ADMIN_COMMAND && env.CHAT_LOGS) {
-    // 指令 1：清空所有日志
     if (userMessage === ADMIN_COMMAND) {
       let listed;
       let deletedCount = 0;
@@ -206,7 +184,6 @@ export async function processGeminiRequest({
       }
     }
 
-    // 指令 2：查看封禁 IP 名单
     if (userMessage === `${ADMIN_COMMAND} bans`) {
       let listed;
       let bannedIPs = [];
@@ -230,7 +207,6 @@ export async function processGeminiRequest({
     }
   }
 
-  // --- IP 封禁检查 ---
   if (env.CHAT_LOGS && clientIP !== "unknown-ip") {
     const banKey = `ban_${clientIP}`;
     const isBanned = await env.CHAT_LOGS.get(banKey);
@@ -245,7 +221,6 @@ export async function processGeminiRequest({
     }
   }
 
-  // --- IP 黑名单拦截 ---
   const blockedIPsString = env.BLOCKED_IPS || "";
   const blockedIPs = blockedIPsString.split(",").map((ip) => ip.trim());
   if (clientIP !== "unknown-ip" && blockedIPs.includes(clientIP)) {
@@ -258,7 +233,6 @@ export async function processGeminiRequest({
     );
   }
 
-  // --- 速率限制 ---
   if (env.CHAT_LOGS && clientIP !== "unknown-ip") {
     const rateLimitKey = `rate_limit_${clientIP}`;
     const lastRequestTime = await env.CHAT_LOGS.get(rateLimitKey);
@@ -276,7 +250,6 @@ export async function processGeminiRequest({
     );
   }
 
-  // --- 敏感词拦截 ---
   const cleanMessage = userMessage
     .replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "")
     .toLowerCase();
@@ -314,7 +287,6 @@ export async function processGeminiRequest({
     });
   }
 
-  // --- 日志记录 ---
   if (env.CHAT_LOGS) {
     const timeFormatter = new Intl.DateTimeFormat("zh-CN", {
       timeZone: "Asia/Shanghai",
@@ -354,7 +326,6 @@ export async function processGeminiRequest({
     );
   }
 
-  // --- 调用 Gemini API ---
   const apiKey = env.GEMINI_API_KEY;
   if (!apiKey) {
     return jsonResponse(
@@ -455,7 +426,6 @@ export async function processGeminiRequest({
 
   try {
 
-    // 处理提问阶段拦截
     if (data.promptFeedback && data.promptFeedback.blockReason) {
       return jsonResponse({
         reply: `**触发云端安全策略**：由于包含敏感词汇，该问题被 Google 底层引擎拒绝回答 (原因: ${data.promptFeedback.blockReason})。`,
@@ -474,20 +444,17 @@ export async function processGeminiRequest({
       let parts = data.candidates[0].content.parts;
       let aiReply = parts.map((p) => p.text).join("\n").trim();
 
-      // 联网搜索元数据
       const groundingMetadata = data.candidates[0].groundingMetadata;
       if (groundingMetadata && groundingMetadata.searchEntryPoint) {
         aiReply += `\n\n> *基于 Google 搜索结果生成*`;
       }
 
-      // LaTeX 箭头处理
       aiReply = aiReply
         .replace(/\$\\rightarrow\$/g, "→")
         .replace(/\\rightarrow/g, "→")
         .replace(/\$\\to\$/g, "→")
         .replace(/\\to/g, "→");
 
-      // Emoji 过滤
       const allowedEmojisStr =
         "🤣🥺😀😁😂😃😄😅😆😇😉😊😋😌😍😎😏😐😒😓😔😖😘😚😜😝😞😠😡😢😣😤😥😨😩😪😫😭😰😱😲😳😴😵😷💡💦💬💻👌👍👏🔍🎉✅❌";
       const emojiRegex =

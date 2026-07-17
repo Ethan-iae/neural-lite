@@ -1,9 +1,3 @@
-/**
- * gemini.js — 保留的独立 Gemini API 端点（薄壳）
- * 
- * 核心逻辑已提取到 lib/gemini-core.js。
- * 此文件仅作为 /api/gemini 路由入口，调用共享模块。
- */
 
 import { processGeminiRequest, handleOptions } from "../lib/gemini-core.js";
 

@@ -61,7 +61,6 @@ onMounted(() => {
 <template>
   <div id="chat-container" ref="chatContainer">
     <template v-for="(msg, index) in messages" :key="msg.id">
-      <!-- Normal time dividers (skipped for index 1 since the system message has a trailing timeline) -->
       <div 
         v-if="index > 1 && (msg.timestamp - messages[index-1].timestamp > 300000)" 
         class="time-divider"
@@ -76,7 +75,6 @@ onMounted(() => {
         :is-typing="msg.isTyping"
       />
 
-      <!-- Fixed timeline immediately below the system welcome message -->
       <div 
         v-if="index === 0" 
         class="time-divider"
