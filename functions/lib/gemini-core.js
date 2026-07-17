@@ -326,7 +326,7 @@ export async function processGeminiRequest({
     );
   }
 
-  const apiKey = env.GEMINI_API_KEY;
+  const apiKey = (env.GEMINI_API_KEY || "").replace(/['"]/g, "").trim();
   if (!apiKey) {
     return jsonResponse(
       { error: "API Key not configured" },
